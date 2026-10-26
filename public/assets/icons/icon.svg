@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#143d2b"/>
+      <stop offset="50%" stop-color="#1b5e3f"/>
+      <stop offset="100%" stop-color="#0d261b"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe259"/>
+      <stop offset="100%" stop-color="#ffa751"/>
+    </linearGradient>
+    <linearGradient id="maroon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#991b1b"/>
+      <stop offset="100%" stop-color="#691212"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="100" fill="url(#bg)"/>
+  <rect x="16" y="16" width="480" height="480" rx="84" fill="none" stroke="#2dd4bf" stroke-width="6" stroke-opacity="0.3"/>
+
+  <path d="M40 180 L180 180" stroke="#fef08a" stroke-width="8" stroke-linecap="round" opacity="0.6"/>
+  <path d="M30 220 L140 220" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
+  <path d="M50 260 L190 260" stroke="#fef08a" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+
+  <g filter="url(#shadow)">
+    <circle cx="280" cy="140" r="38" fill="#ffedd5"/>
+    <path d="M250 140 Q280 100 315 130 Q325 150 295 145 Z" fill="#1e293b"/>
+    <path d="M255 180 L315 180 L330 290 L245 290 Z" fill="url(#maroon)"/>
+    <circle cx="285" cy="210" r="8" fill="#fbbf24"/>
+    <circle cx="285" cy="210" r="4" fill="#ffffff"/>
+    <circle cx="270" cy="250" r="8" fill="#fbbf24"/>
+    <circle cx="305" cy="250" r="8" fill="#fbbf24"/>
+    <rect x="225" y="195" width="30" height="65" rx="10" fill="#0f172a"/>
+    <path d="M260 200 L210 240 L190 220" stroke="#ffedd5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M310 200 L360 240 L380 215" stroke="#ffedd5" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M265 290 L230 365 L180 375" stroke="#334155" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M310 290 L360 360 L415 350" stroke="#334155" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <rect x="155" y="365" width="40" height="18" rx="8" fill="#0f172a"/>
+    <rect x="395" y="340" width="40" height="18" rx="8" fill="#0f172a"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="30" y="405" width="452" height="72" rx="18" fill="#991b1b"/>
+    <text x="256" y="445" font-family="'Impact', 'Arial Black', sans-serif" font-size="34" font-weight="900" fill="url(#gold)" text-anchor="middle" letter-spacing="1">KEJARAN PAK WAHID!</text>
+    <text x="256" y="468" font-family="'Segoe UI', sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">SMA N 1 PASIR SAKTI</text>
+  </g>
+</svg>

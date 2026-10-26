@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="KEJARAN PAK WAHID! - Nongkrong Boleh, Ketahuan Jangan! Game 3D Endless Runner SMA Negeri 1 Pasir Sakti.">
+  <meta name="theme-color" content="#1b4d3e">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <title>KEJARAN PAK WAHID! — 3D School Endless Runner</title>
+  <link rel="stylesheet" href="./src/style.css">
+
+  <!-- Dual compatibility: Importmap for direct static serving & CDN fallback -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="game-container">
+    <!-- 3D WebGL Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Main Menu Overlay -->
+    <div id="main-menu">
+      <div class="menu-header">
+        <div class="school-tag">🏫 SMA Negeri 1 Pasir Sakti</div>
+        <h1 class="game-title">KEJARAN<br>PAK WAHID!</h1>
+        <p class="game-tagline">"Nongkrong Boleh, Ketahuan Jangan!"</p>
+      </div>
+
+      <div class="menu-actions">
+        <div class="menu-highscore-box">
+          <span>🏆 REKOR TERJAUH</span>
+          <span id="menu-highscore">0 m</span>
+        </div>
+        <button id="btn-play" class="btn-primary">▶ MULAI BERLARI</button>
+        <button id="btn-instructions" class="btn-secondary">📖 CARA BERMAIN</button>
+        <button id="btn-settings" class="btn-secondary">⚙ PENGATURAN</button>
+      </div>
+    </div>
+
+    <!-- In-Game HUD -->
+    <div id="game-hud" class="hidden">
+      <div class="hud-top-bar">
+        <!-- Top Left: Score & Coins -->
+        <div class="hud-left">
+          <div class="hud-stat-badge">
+            <span class="icon">🏃</span>
+            <span id="hud-score">0 m</span>
+          </div>
+          <div class="hud-stat-badge coins">
+            <span class="icon">🪙</span>
+            <span id="hud-coins">0</span>
+          </div>
+        </div>
+
+        <!-- Top Right: Pak Wahid Distance Bar & Buttons -->
+        <div class="hud-right">
+          <div class="teacher-meter">
+            <div id="hud-teacher-avatar" class="teacher-avatar">👨‍🏫</div>
+            <div class="meter-info">
+              <span class="meter-title">Jarak Pak Wahid</span>
+              <div class="meter-bar-track">
+                <div id="hud-dist-bar" class="meter-bar-fill"></div>
+              </div>
+            </div>
+            <span id="hud-dist-text" class="meter-distance-text">9.0 m</span>
+          </div>
+
+          <button id="btn-mute-hud" class="hud-btn" title="Suara">🔊</button>
+          <button id="btn-pause-hud" class="hud-btn" title="Pause">⏸</button>
+        </div>
+      </div>
+
+      <!-- Dialogue speech bubble for Pak Wahid shouts -->
+      <div id="hud-dialogue" class="hidden"></div>
+
+      <!-- Active Powerup Badges -->
+      <div id="hud-powerups"></div>
+
+      <!-- Touch Controls for Android / Mobile Devices -->
+      <div id="touch-controls">
+        <div class="touch-cluster">
+          <button id="btn-left" class="touch-btn" aria-label="Kiri">
+            ◀
+            <span>Kiri</span>
+          </button>
+          <button id="btn-right" class="touch-btn" aria-label="Kanan">
+            ▶
+            <span>Kanan</span>
+          </button>
+        </div>
+
+        <div class="touch-cluster">
+          <button id="btn-jump" class="touch-btn" aria-label="Lompat">
+            ▲
+            <span>Lompat</span>
+          </button>
+          <button id="btn-slide" class="touch-btn" aria-label="Meluncur">
+            ▼
+            <span>Slide</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause Menu Modal -->
+    <div id="pause-menu" class="modal-overlay hidden">
+      <div class="arcade-card">
+        <h2 style="color: #facc15; font-size: 32px; font-family: 'Impact'; margin-bottom: 20px;">GAME DI-PAUSE</h2>
+        <div class="menu-actions" style="margin: 0 auto;">
+          <button id="btn-resume" class="btn-primary">LANJUTKAN</button>
+          <button id="btn-restart-pause" class="btn-secondary">ULANG DARI AWAL</button>
+          <button id="btn-menu-pause" class="btn-secondary">MENU UTAMA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-menu" class="modal-overlay hidden">
+      <div class="arcade-card">
+        <h2 class="go-title">KAMU KETANGKAP<br>PAK WAHID!</h2>
+        <p id="go-reason" class="go-reason">Tertangkap basah nongkrong di lorong belakang kelas saat jam pelajaran!</p>
+        
+        <div id="go-new-record" class="new-record-badge hidden">🎉 REKOR TERBARU!</div>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-label">Jarak Berlari</div>
+            <div id="go-score" class="stat-value">0 m</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Koin Terkumpul</div>
+            <div id="go-coins" class="stat-value">0</div>
+          </div>
+        </div>
+
+        <div class="menu-highscore-box" style="margin-bottom: 20px;">
+          <span>🏆 REKOR TERTINGGI:</span>
+          <span id="go-highscore">0 m</span>
+        </div>
+
+        <div class="menu-actions" style="margin: 0 auto;">
+          <button id="btn-restart" class="btn-primary">🔄 COBA LAGI</button>
+          <button id="btn-menu" class="btn-secondary">🏠 MENU UTAMA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions Modal -->
+    <div id="instructions-modal" class="modal-overlay hidden">
+      <div class="arcade-card modal-content" style="max-height: 85vh; overflow-y: auto;">
+        <h2>CARA BERMAIN</h2>
+        <p>Kamu adalah siswa SMA berbaju batik merah marun yang sedang nongkrong di lorong belakang kelas SMA Negeri 1 Pasir Sakti. Tiba-tiba Pak Wahid memergokimu! Lari sejauh mungkin dan jangan sampai tertangkap!</p>
+
+        <h3 style="color: #38bdf8; margin: 14px 0 8px 0;">🎮 KONTROL:</h3>
+        <ul class="guide-list">
+          <li><strong>Keyboard:</strong> A / D atau Panah Kiri/Kanan = Pindah Jalur</li>
+          <li><strong>Lompat:</strong> W, Spasi, atau Panah Atas (hindari meja/kursi/tempat sampah)</li>
+          <li><strong>Meluncur (Slide):</strong> S atau Panah Bawah (lewati palang parkir)</li>
+          <li><strong>HP Android:</strong> Geser layar (Swipe) Kiri/Kanan/Atas/Bawah atau tekan Tombol Sentuh di layar</li>
+        </ul>
+
+        <h3 style="color: #facc15; margin: 14px 0 8px 0;">⚡ POWER-UP:</h3>
+        <ul class="guide-list">
+          <li>👟 <strong>Sepatu Kecepatan:</strong> Lari turbo & kebal tabrakan sementara</li>
+          <li>📖 <strong>Buku Perlindungan:</strong> Melindungi dari 1 kali tabrakan</li>
+          <li>🪙 <strong>Koin Kantin:</strong> Magnet menarik semua koin di sekitar</li>
+          <li>🔔 <strong>Bel Sekolah:</strong> Skor jarak dikalikan 2X</li>
+          <li>💨 <strong>Mode Kabur:</strong> Menjauhkan Pak Wahid secara drastis</li>
+        </ul>
+
+        <button id="btn-close-instructions" class="btn-primary" style="width: 100%; margin-top: 10px;">MENGERTI</button>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal-overlay hidden">
+      <div class="arcade-card modal-content">
+        <h2>PENGATURAN</h2>
+        <div class="setting-row">
+          <span>Kualitas Grafis:</span>
+          <select id="setting-quality">
+            <option value="high" selected>Tinggi (Bayangan PBR)</option>
+            <option value="medium">Sedang (Standar)</option>
+            <option value="low">Rendah (Optimal HP)</option>
+          </select>
+        </div>
+        <div class="setting-row">
+          <span>Tombol Sentuh Layar:</span>
+          <input type="checkbox" id="setting-touch" checked>
+        </div>
+        <p style="font-size: 12px; color: #94a3b8; margin-top: 12px;">
+          💡 Tips: Di smartphone, kamu bisa memainkan game secara fleksibel menggunakan tombol virtual atau swipe gesture langsung di layar!
+        </p>
+        <button id="btn-close-settings" class="btn-primary" style="width: 100%; margin-top: 18px;">SIMPAN & TUTUP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Entry Script -->
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
